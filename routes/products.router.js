@@ -16,7 +16,7 @@ router.get('/', async (req, res, next) => {
   }
 });
 
-router.get('/:id',
+router.get('/search',
   validatorHandler(getProductSchema, 'params'),
   async (req, res, next) => {
     try {
@@ -29,7 +29,7 @@ router.get('/:id',
   }
 );
 
-router.post('/',
+router.post('/create',
   validatorHandler(createProductSchema, 'body'),
   async (req, res, next) => {
     try {
@@ -42,12 +42,12 @@ router.post('/',
   }
 );
 
-router.patch('/:id',
-  validatorHandler(getProductSchema, 'params'),
+router.patch('/update',
+  validatorHandler(getProductSchema, 'query'),
   validatorHandler(updateProductSchema, 'body'),
   async (req, res, next) => {
     try {
-      const { id } = req.params;
+      const { id } = req.query;
       const body = req.body;
       const product = await service.update(id, body);
       res.json(product);
@@ -57,11 +57,12 @@ router.patch('/:id',
   }
 );
 
-router.delete('/:id',
-  validatorHandler(getProductSchema, 'params'),
+router.delete('/del',
+  validatorHandler(getProductSchema, 'query'),
   async (req, res, next) => {
     try {
-      const { id } = req.params;
+      const { id } = req.query;
+
       await service.delete(id);
       res.status(201).json({id});
     } catch (error) {
