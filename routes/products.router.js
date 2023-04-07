@@ -17,10 +17,10 @@ router.get('/', async (req, res, next) => {
 });
 
 router.get('/search',
-  validatorHandler(getProductSchema, 'params'),
+  validatorHandler(getProductSchema, 'query'),
   async (req, res, next) => {
     try {
-      const { id } = req.params;
+      const { id } = req.query;
       const product = await service.findOne(id);
       res.json(product);
     } catch (error) {
@@ -50,7 +50,7 @@ router.patch('/update',
       const { id } = req.query;
       const body = req.body;
       const product = await service.update(id, body);
-      res.json(product);
+      res.json({message: 'Updated', product});
     } catch (error) {
       next(error);
     }
@@ -62,9 +62,12 @@ router.delete('/del',
   async (req, res, next) => {
     try {
       const { id } = req.query;
+      const product = await service.findOne(id)
+      if (id) {
+        await service.delete(id);
+        res.status(201).json({message: 'deleted', product});
+      }
 
-      await service.delete(id);
-      res.status(201).json({id});
     } catch (error) {
       next(error);
     }

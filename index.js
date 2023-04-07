@@ -8,6 +8,7 @@ const app = express();
 const port = process.env.PORT || 8080;
 
 app.use(express.json());
+app.use(express.urlencoded({extended:false}))
 
 const whitelist = ['http://localhost:3000', 'https://myapp.co'];
 const options = {
@@ -37,5 +38,6 @@ app.use(errorHandler);
 
 
 app.listen(port, () => {
-  console.log('PROJECT RUN INTO PORT ' +  port);
+   console.log('PROJECT RUN INTO PORT ' +  port);
 });
+

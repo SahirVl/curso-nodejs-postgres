@@ -1,0 +1,18 @@
+version: '3.3'
+
+services:
+  postgres:
+    image: postgres:13
+    environment:
+      - POSTGRES_DB=mi_tienda
+      - POSTGRES_USER=Sahirvl
+      - POSTGRES_PASSWORD=sahir1989
+    ports:
+      - 5432:5432
+volumes:
+      - ./postgres_data:/var/lib/postgresql/data
+
+
+# docker-compose up -d postgres // para iniciar el servicio
+# docker-compose ps // para ver que servicios se estan ejectutando
+# docker-compose down // parar el servicio
