@@ -5,7 +5,7 @@ services:
     image: postgres:13
     environment:
       - POSTGRES_DB=mi_tienda
-      - POSTGRES_USER=Sahirvl
+      - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=sahir1989
     ports:
       - 5432:5432
