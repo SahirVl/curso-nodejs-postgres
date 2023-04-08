@@ -8,18 +8,20 @@ class ProductsService {
   }
 
   async create(product) {
-    const newProduct = {
-      edad: product.edad,
-      historia: product.historia,
-      imagen: product.imagen,
-      nombre: product.nombre,
-      peso: product.peso,
+    // aqui creamos la consulta sql y luego le pasamos a result la consulta
+    // y el parametro (...spread)product y la foreingkey
+    const sql = 'INSERT INTO personaje SET ?';
+    const result = await this.pool.query(sql, {
+      ...product,
       id_pelicula_fk: product.id_pelicula_fk,
-    };
-    console.log(newProduct)
-    const sql = 'INSERT INTO personaje SET ?'
-    const rta = await this.pool.query(sql, newProduct)
-    return  {message: 'created', newProduct , rta}
+    });
+    // aqui se retorna el resultado con operador ternario en caso de ser true o false
+    return result && result.affectedRows
+      ? {
+          message: 'created',
+          product: { ...product, id: result.insertId },
+        }
+      : null;
   }
 
   async find() {
@@ -28,34 +30,32 @@ class ProductsService {
   }
 
   async findOne(id) {
-    const sql = 'SELECT * FROM personaje WHERE id = ?'
-    const product = await this.pool.query(sql,[id]);
+    const sql = 'SELECT * FROM personaje WHERE id = ?';
+    const product = await this.pool.query(sql, [id]);
     if (product == false) {
       throw boom.notFound('product not found');
     }
     return product;
   }
 
-  async update(id, changes) {
-    const index = this.products.findIndex((item) => item.id === id);
-    if (index === -1) {
+  async update(changes, id) {
+    const query = 'UPDATE personaje SET ? WHERE id = ?';
+    const result = await this.pool.query(query, [changes, id]);
+
+    if (!result.affectedRows) {
       throw boom.notFound('product not found');
     }
-    const product = this.products[index];
-    this.products[index] = {
-      ...product,
-      ...changes,
-    };
-    return this.products[index];
+    return changes;
   }
 
   async delete(id) {
-    const index = this.products.findIndex((item) => item.id === id);
-    if (index === -1) {
-      throw boom.notFound('product not found');
+    const sql = 'DELETE FROM personaje WHERE id = ?';
+    const result = await this.pool.query(sql, [id]);
+
+    if (!result) {
+      throw boom.notFound(`id product # ${id} not found`);
     }
-    this.products.splice(index, 1);
-    return { id };
+    return id;
   }
 }
 

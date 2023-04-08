@@ -9,7 +9,7 @@ const pool = createPool({
   database: 'disney',
 });
 
-pool.query('SELECT * FROM genero', function(err, results) {
+pool.query('SHOW tables', function(err, results) {
   if (err) {
     console.log(err);
     throw err;

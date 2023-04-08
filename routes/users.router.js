@@ -9,20 +9,20 @@ const service = new UserService();
 
 router.get('/', async (req, res, next) => {
   try {
-    const categories = await service.find();
-    res.json(categories);
+    const users = await service.find();
+    res.status(200).json(users);
   } catch (error) {
     next(error);
   }
 });
 
-router.get('/:id',
-  validatorHandler(getUserSchema, 'params'),
+router.get('/search',
+  validatorHandler(getUserSchema, 'query'),
   async (req, res, next) => {
     try {
-      const { id } = req.params;
-      const category = await service.findOne(id);
-      res.json(category);
+      const { id, correo } = req.query;
+      const user = await service.findOne(id,correo);
+      res.status(200).json(user);
     } catch (error) {
       next(error);
     }
@@ -34,40 +34,44 @@ router.post('/',
   async (req, res, next) => {
     try {
       const body = req.body;
-      const newCategory = await service.create(body);
-      res.status(201).json(newCategory);
+      const newUser = await service.create(body);
+      res.status(201).json(newUser);
     } catch (error) {
       next(error);
     }
   }
 );
 
-router.patch('/:id',
-  validatorHandler(getUserSchema, 'params'),
+router.patch('/updt',
+  validatorHandler(getUserSchema, 'query'),
   validatorHandler(updateUserSchema, 'body'),
   async (req, res, next) => {
     try {
-      const { id } = req.params;
       const body = req.body;
-      const category = await service.update(id, body);
-      res.json(category);
+      const { id } = req.query;
+      const updtUser = await service.update(body,id);
+      res.status(201).json({message: 'Updated',updtUser});
     } catch (error) {
       next(error);
     }
   }
 );
 
-router.delete('/:id',
-  validatorHandler(getUserSchema, 'params'),
-  async (req, res, next) => {
-    try {
-      const { id } = req.params;
+router.delete('/del',
+validatorHandler(getUserSchema, 'query'),
+async (req, res, next) => {
+  try {
+    const { id } = req.query;
+    const user = await service.findOne(id)
+    if (id) {
       await service.delete(id);
-      res.status(201).json({id});
-    } catch (error) {
-      next(error);
+      res.status(201).json({message: 'deleted', user});
     }
+
+  } catch (error) {
+    next(error);
   }
+}
 );
 
 module.exports = router;

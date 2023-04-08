@@ -21,6 +21,7 @@ const updateProductSchema = Joi.object({
   edad: edad,
   historia: historia,
   imagen: imagen,
+  nombre: nombre,
   peso: peso,
   id_pelicula_fk: id_pelicula_fk
 });

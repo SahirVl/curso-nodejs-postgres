@@ -46,9 +46,9 @@ router.patch('/update',
   validatorHandler(updateProductSchema, 'body'),
   async (req, res, next) => {
     try {
-      const { id } = req.query;
       const body = req.body;
-      const product = await service.update(id, body);
+      const { id } = req.query;
+      const product = await service.update(body,id);
       res.json({message: 'Updated', product});
     } catch (error) {
       next(error);
