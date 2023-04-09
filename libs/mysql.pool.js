@@ -3,13 +3,12 @@ const { config } = require('./../config/config')
 const {promisify} =require('util')
 
 const pool = createPool({
-  host     : process.env.DB_HOST,
-  port     : process.env.DB_PORT,
-  user     : process.env.DB_USER,
-  password : process.env.DB_PASSWORD,
-  database : process.env.DB_NAME
+  host     : encodeURIComponent(config.dbHost),
+  port     : encodeURIComponent(config.dbPort),
+  user     : encodeURIComponent(config.dbUser),
+  password : encodeURIComponent(config.dbPassword),
+  database : encodeURIComponent(config.dbName)
 })
-
 
 pool.query('SHOW tables', function(err, results) {
   if (err) {

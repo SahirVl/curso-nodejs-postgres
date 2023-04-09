@@ -5,7 +5,7 @@ const routerApi = require('./routes');
 const { logErrors, errorHandler, boomErrorHandler } = require('./middlewares/error.handler');
 
 const app = express();
-const port = process.env.PORT || 8080;
+const port = process.env.PORT ;
 
 app.use(express.json());
 app.use(express.urlencoded({extended:false}))
@@ -38,6 +38,6 @@ app.use(errorHandler);
 
 
 app.listen(port, () => {
-   console.log('PROJECT RUN INTO PORT ' +  port);
+   console.log('++++++ !HAPPY HACKING¡ ++++++');
 });
 
