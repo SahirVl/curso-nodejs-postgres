@@ -1,5 +1,6 @@
 const { Sequelize } = require('sequelize');
 const { config } = require('../config/config');
+const setupModels = require('../db/models');
 
 const sequelize = new Sequelize(
   config.dbName,
@@ -19,6 +20,10 @@ sequelize
   .authenticate()
   .then(() => console.log('Connection has been established successfully.'))
   .catch((error) => console.error('Unable to connect to the database:', error));
+
+setupModels(sequelize)
+
+sequelize.sync()
 
 /*async ()=>{
     const [data] = await sequelize.query('SELECT * FROM genero');
