@@ -47,9 +47,9 @@ router.patch('/updt',
   validatorHandler(updateUserSchema, 'body'),
   async (req, res, next) => {
     try {
-      const body = req.body;
       const { id } = req.query;
-      const updtUser = await service.update(body,id);
+      const body = req.body;
+      const updtUser = await service.update(id,body);
       res.status(201).json({message: 'Updated',updtUser});
     } catch (error) {
       next(error);

@@ -1,9 +1,11 @@
+const { config } = require('../config/config')
+
 {
   "development": {
-    "username": "root",
-    "password": null,
-    "database": "database_development",
-    "host": "127.0.0.1",
+    "username": config.dbUser,
+    "password": config.dbPassword,
+    "database": "disney",
+    "host": config.dbHost,
     "dialect": "mysql"
   },
   "test": {
