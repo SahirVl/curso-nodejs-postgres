@@ -23,7 +23,7 @@ sequelize
 
 setupModels(sequelize)
 
-sequelize.sync()
+// sequelize.sync()
 
 /*async ()=>{
     const [data] = await sequelize.query('SELECT * FROM genero');

@@ -1,25 +1,27 @@
 const { config } = require('../config/config')
 
-{
+
+
+module.exports = {
   "development": {
-    "username": config.dbUser,
-    "password": config.dbPassword,
-    "database": "disney",
-    "host": config.dbHost,
+    "username": encodeURIComponent(config.dbUser),
+    "password": encodeURIComponent(config.dbPassword),
+    "database": encodeURIComponent(config.dbName),
+    "host": encodeURIComponent(config.dbHost),
     "dialect": "mysql"
   },
   "test": {
-    "username": "root",
-    "password": null,
-    "database": "database_test",
-    "host": "127.0.0.1",
+    "username": encodeURIComponent(config.dbUser),
+    "password": encodeURIComponent(config.dbPassword),
+    "database": encodeURIComponent(config.dbName),
+    "host": encodeURIComponent(config.dbHost),
     "dialect": "mysql"
   },
   "production": {
-    "username": "root",
-    "password": null,
-    "database": "database_production",
-    "host": "127.0.0.1",
+    "username": encodeURIComponent(config.dbUser),
+    "password": encodeURIComponent(config.dbPassword),
+    "database": encodeURIComponent(config.dbName),
+    "host": encodeURIComponent(config.dbHost),
     "dialect": "mysql"
   }
 }

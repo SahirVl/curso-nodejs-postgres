@@ -17,6 +17,11 @@ const UserSchema = {
     allowNull: false,
     type: DataTypes.STRING,
   },
+  role: {
+    allowNull: false,
+    type: DataTypes.STRING,
+    defaultValue: 'customer'
+  },
   createAt: {
     allowNull: false,
     type: DataTypes.DATE,
@@ -42,4 +47,4 @@ class User extends Model {
 //Creamos la tabla
 User.sync();
 
-module.exports =  {USER_TABLE, UserSchema, User}
+module.exports =  { USER_TABLE, UserSchema, User }
