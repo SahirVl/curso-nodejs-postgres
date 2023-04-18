@@ -1,6 +1,6 @@
-const { Model, DataTypes } = require('sequelize')
+const { Model, DataTypes } = require('sequelize');
 
-const USER_TABLE = 'users'
+const USER_TABLE = 'users';
 const UserSchema = {
   id: {
     allowNull: false,
@@ -20,31 +20,34 @@ const UserSchema = {
   role: {
     allowNull: false,
     type: DataTypes.STRING,
-    defaultValue: 'customer'
+    defaultValue: 'customer',
   },
   createAt: {
     allowNull: false,
     type: DataTypes.DATE,
-    field: "create_at", // el verdadero nombre como quiero que se cree
+    field: 'create_at', // el verdadero nombre como quiero que se cree
     defaultValue: DataTypes.NOW,
   },
-}
+};
 
 class User extends Model {
-  static associate(){
-    // associate
+  static associate(models) {
+    this.hasOne(models.Customer, {
+      as: 'customer',
+      foreignKey: 'userId',
+    });
   }
-  static config(sequelize){
+  static config(sequelize) {
     return {
       sequelize,
       tableName: USER_TABLE,
       modelName: 'User',
-      timestamps: false
-    }
+      timestamps: false,
+    };
   }
 }
 
 //Creamos la tabla
-User.sync();
+// User.sync();
 
-module.exports =  { USER_TABLE, UserSchema, User }
+module.exports = { USER_TABLE, UserSchema, User };

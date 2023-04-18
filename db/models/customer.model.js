@@ -33,6 +33,7 @@ const CustomerSchema = {
     field: 'user_id',
     allowNull: true,
     type: DataTypes.INTEGER,
+    unique: true,
     references: {
       model: USER_TABLE,
       key: 'id'
@@ -57,6 +58,6 @@ class Customer extends Model {
 }
 
 //Creamos la tabla
-Customer.sync();
+// Customer.sync();
 
 module.exports =  { CUSTOMER_TABLE, CustomerSchema, Customer }
