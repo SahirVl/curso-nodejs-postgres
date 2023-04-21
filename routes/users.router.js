@@ -20,8 +20,8 @@ router.get('/search',
   validatorHandler(getUserSchema, 'query'),
   async (req, res, next) => {
     try {
-      const { id, correo } = req.query;
-      const user = await service.findOne(id,correo);
+      const { id, email } = req.query;
+      const user = await service.findOne(id,email);
       res.status(200).json(user);
     } catch (error) {
       next(error);

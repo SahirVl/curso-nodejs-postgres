@@ -1,6 +1,7 @@
 const boom = require('@hapi/boom');
-const {models} = require('../libs/sequelize');
+const { models } = require('../libs/sequelize');
 const pool = require('../libs/mysql.pool');
+const { Op } = require('sequelize');
 
 class UserService {
   constructor() {
@@ -9,10 +10,8 @@ class UserService {
   }
 
   async create(data) {
-    const newUser = await models.User.create(data)
-    return newUser
-
-
+    const newUser = await models.User.create(data);
+    return newUser;
   }
 
   /*async create(data) {
@@ -28,10 +27,10 @@ class UserService {
   }*/
   async find() {
     const rta = await models.User.findAll({
-      include: ['customer']
-    })
+      include: ['customer'],
+    });
     if (!rta) {
-    return {message: 'no se hallaron datos'}
+      return { message: 'no se hallaron datos' };
     }
     return rta;
   }
@@ -42,12 +41,16 @@ class UserService {
     }
     return rta;
   }*/
-  async findOne(id){
-    const user = await models.User.findByPk(id)
-    if (!user) {
-      throw boom.notFound()
+  async findOne(id, email) {
+    const user = await models.User.findAll({
+      where: {
+        [Op.or]: [{ id: { [Op.like]: id } } , { email: { [Op.like]: email } }],
+      },
+    });
+    if (!user || user == false) {
+      throw boom.notFound();
     }
-    return user
+    return user;
   }
   /*async findOne(id, correo) {
     const sql = 'SELECT * FROM usuario WHERE id = ? OR correo = ?';
@@ -58,12 +61,10 @@ class UserService {
     return user;
   }*/
 
-  async update(id,changes) {
-    const user = await this.findOne(id)
-    const rta = await user.update(changes)
-    return rta
-
-
+  async update(id, changes) {
+    const user = await this.findOne(id);
+    const rta = await user.update(changes);
+    return rta;
   }
   /*async update(changes, id) {
     const query = 'UPDATE usuario SET ? WHERE id = ?';
@@ -73,10 +74,10 @@ class UserService {
     }
     return changes;
   }*/
-  async delete(id){
-    const user = await this.findOne(id)
-    await user.destroy()
-    return {id}
+  async delete(id) {
+    const user = await this.findOne(id);
+    await user.destroy();
+    return { id };
   }
   /*async delete(id) {
     const sql = 'DELETE FROM usuario WHERE id = ?';
