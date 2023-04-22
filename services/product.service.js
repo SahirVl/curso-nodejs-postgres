@@ -1,4 +1,24 @@
+const { models } = require('../libs/sequelize');
 const boom = require('@hapi/boom');
+
+class ProductsService {
+  constructor() {
+  }
+
+async create(data) {
+  const newProduct = await models.Product.create(data)
+  return newProduct;
+}
+
+
+}
+module.exports = ProductsService;
+
+
+
+
+// AQUI ABAJO UN EJEMPLO DE QUERY SQL
+/*const boom = require('@hapi/boom');
 const pool = require('../libs/mysql.pool');
 
 class ProductsService {
@@ -59,4 +79,4 @@ class ProductsService {
   }
 }
 
-module.exports = ProductsService;
+module.exports = ProductsService; */

@@ -16,12 +16,12 @@ router.get('/', async (req, res, next) => {
   }
 });
 
-router.get('/:id',
-  validatorHandler(getCategorySchema, 'params'),
+router.get('/search',
+  validatorHandler(getCategorySchema, 'query'),
   async (req, res, next) => {
     try {
-      const { id } = req.params;
-      const category = await service.findOne(id);
+      const { name } = req.query;
+      const category = await service.findOne(name);
       res.json(category);
     } catch (error) {
       next(error);
@@ -42,12 +42,12 @@ router.post('/',
   }
 );
 
-router.patch('/:id',
-  validatorHandler(getCategorySchema, 'params'),
+router.patch('/updt',
+  validatorHandler(getCategorySchema, 'query'),
   validatorHandler(updateCategorySchema, 'body'),
   async (req, res, next) => {
     try {
-      const { id } = req.params;
+      const { id } = req.query;
       const body = req.body;
       const category = await service.update(id, body);
       res.json(category);
@@ -57,7 +57,7 @@ router.patch('/:id',
   }
 );
 
-router.delete('/:id',
+router.delete('/del',
   validatorHandler(getCategorySchema, 'params'),
   async (req, res, next) => {
     try {

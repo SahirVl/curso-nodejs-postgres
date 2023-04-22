@@ -1,11 +1,6 @@
 const { Model, DataTypes, Sequelize } = require('sequelize');
 const { CATEGORY_TABLE } = require('./category.model');
 
-function refe() {
-  let num1 = parseInt(Math.random() * 999);
-  let num2 = parseInt(Math.random() * 999);
-  return `AC${num1}${num2}`;
-}
 
 const PRODUCT_TABLE = 'products'; // nombre de la tabla
 
@@ -20,7 +15,11 @@ const ProductSchema = {
   ref: {
     allowNull: false,
     type: DataTypes.STRING,
-    defaultValue: refe(),
+    defaultValue: function refe() {
+      let num1 = parseInt(Math.random() * 999);
+      let num2 = parseInt(Math.random() * 999);
+      return  `AC${num1}${num2}`;
+    }, // El valor por defecto es una funcion que retorna una referencia random
   },
   name: {
     allowNull: false,
