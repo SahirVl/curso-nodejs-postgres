@@ -14,6 +14,7 @@ const ProductSchema = {
   },
   ref: {
     allowNull: false,
+    // unique: true, este campo debe ser unico, se me olvido ponerlo
     type: DataTypes.STRING,
     defaultValue: function refe() {
       let num1 = parseInt(Math.random() * 999);

@@ -1,21 +1,43 @@
 const { models } = require('../libs/sequelize');
 const boom = require('@hapi/boom');
 
+
 class ProductsService {
-  constructor() {
+  constructor() {}
+
+  async create(data) {
+    const newProduct = await models.Product.create(data);
+    return newProduct;
   }
 
-async create(data) {
-  const newProduct = await models.Product.create(data)
-  return newProduct;
-}
+  async find() {
+    const products = await models.Product.findAll({
+      include: [
+        {
+          all: true,
+          attributes: {
+            exclude: ['image', 'createdAt', 'id'],
+          },
+        },
+      ],
+    });
+    if (!products || products == false) {
+      return { message: 'no se hallaron datos' };
+    }
+    return products;
+  }
 
-
+  async findOne(id) {
+    const category = await models.Category.findByPk(id,{
+      include: ['products'],
+    });
+    if (!category || category == false) {
+      throw boom.notFound();
+    }
+    return category;
+  }
 }
 module.exports = ProductsService;
-
-
-
 
 // AQUI ABAJO UN EJEMPLO DE QUERY SQL
 /*const boom = require('@hapi/boom');
