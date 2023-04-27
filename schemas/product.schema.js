@@ -7,6 +7,8 @@ const image = Joi.string()
 const description = Joi.string().max(40)
 const price = Joi.number()
 const categoryId = Joi.number()
+const limit = Joi.number().integer()
+const offset = Joi.number().integer()
 
 const createProductSchema = Joi.object({
   name: name.required(),
@@ -29,4 +31,9 @@ const getProductSchema = Joi.object({
   id: id.required(),
 });
 
-module.exports = { createProductSchema, updateProductSchema, getProductSchema }
+const queryProductSchema = Joi.object({
+  limit,
+  offset
+});
+
+module.exports = { createProductSchema, updateProductSchema, getProductSchema, queryProductSchema }

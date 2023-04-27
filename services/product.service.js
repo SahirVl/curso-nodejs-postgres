@@ -10,8 +10,8 @@ class ProductsService {
     return newProduct;
   }
 
-  async find() {
-    const products = await models.Product.findAll({
+  /*async find(query) {
+    const options = {
       include: [
         {
           all: true,
@@ -20,12 +20,35 @@ class ProductsService {
           },
         },
       ],
-    });
+
+    }
+    const {limit,offset} = query
+    if (limit && offset) {
+      options.limit = limit
+      options.offset = offset
+    }
+
+    const products = await models.Product.findAll(options)
     if (!products || products == false) {
       return { message: 'no se hallaron datos' };
     }
     return products;
+  }*/
+
+  async find(query) {
+    const options = {
+      include: ['category'],
+    };
+    const { limit, offset } = query;
+    if (limit && offset) {
+      options.limit = limit;
+      options.offset = offset;
+    }
+    const products = await models.Product.findAll(options);
+    return products;
   }
+
+
 
   async findOne(id) {
     const category = await models.Category.findByPk(id,{
@@ -37,6 +60,7 @@ class ProductsService {
     return category;
   }
 }
+
 module.exports = ProductsService;
 
 // AQUI ABAJO UN EJEMPLO DE QUERY SQL
