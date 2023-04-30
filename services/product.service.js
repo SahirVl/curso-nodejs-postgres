@@ -1,4 +1,5 @@
 const { models } = require('../libs/sequelize');
+const { Op } = require('sequelize');
 const boom = require('@hapi/boom');
 
 
@@ -38,26 +39,47 @@ class ProductsService {
   async find(query) {
     const options = {
       include: ['category'],
+      where: {}
     };
-    const { limit, offset } = query;
+    const { offset, limit } = query
     if (limit && offset) {
-      options.limit = limit;
-      options.offset = offset;
+      options.offset = parseInt(offset) // esta opcion los traia en String, necesito es Int, por eso el parse
+      options.limit = parseInt(limit) // en la conversion de String a Integer tenia el error
     }
+    const {price} = query
+    if (price) {
+      options.where.price = price
+    }
+    const {priceMin, priceMax} = query
+    if (priceMin && priceMax) {
+      options.where.price = {
+        [Op.gte]: priceMin,
+        [Op.lte]: priceMax
+      }
+    }
+
     const products = await models.Product.findAll(options);
+    if (!products || products == false) {
+      throw boom.notFound('No se hallaron resultados')
+    }
     return products;
   }
 
 
 
   async findOne(id) {
-    const category = await models.Category.findByPk(id,{
-      include: ['products'],
+    const product = await models.Product.findByPk(id,{
+      include: ['category'],
     });
-    if (!category || category == false) {
+    if (!product|| product == false) {
       throw boom.notFound();
     }
-    return category;
+    return product;
+  }
+  async update(id, changes) {
+    const product = await this.findOne(id);
+    const rta = await product.update(changes);
+    return rta;
   }
 }
 

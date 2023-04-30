@@ -1,23 +1,31 @@
 const express = require('express');
-const ProductsService = require('../services/product.service')
-const validatorHandler = require('../middlewares/validator.handler')
-const { createProductSchema, updateProductSchema, getProductSchema, queryProductSchema } = require('./../schemas/product.schema');
+const ProductsService = require('../services/product.service');
+const validatorHandler = require('../middlewares/validator.handler');
+const {
+  createProductSchema,
+  updateProductSchema,
+  getProductSchema,
+  queryProductSchema,
+} = require('./../schemas/product.schema');
 
 const router = express.Router();
-const service = new ProductsService()
+const service = new ProductsService();
 
-router.get('/',
-validatorHandler(queryProductSchema, 'params'),
-async(req, res, next) => {
-  try {
-    const products =  await service.find(req.query)
-    res.status(200).json(products);
-  } catch (error) {
-    next(error);
+router.get(
+  '/',
+  validatorHandler(queryProductSchema, 'query'),
+  async (req, res, next) => {
+    try {
+      const products = await service.find(req.query);
+      res.status(200).json(products);
+    } catch (error) {
+      next(error);
+    }
   }
-});
+);
 
-router.get('/search',
+router.get(
+  '/search',
   validatorHandler(getProductSchema, 'query'),
   async (req, res, next) => {
     try {
@@ -30,7 +38,8 @@ router.get('/search',
   }
 );
 
-router.post('/create',
+router.post(
+  '/create',
   validatorHandler(createProductSchema, 'body'),
   async (req, res, next) => {
     try {
@@ -43,32 +52,33 @@ router.post('/create',
   }
 );
 
-router.patch('/update',
+router.patch(
+  '/update',
   validatorHandler(getProductSchema, 'query'),
   validatorHandler(updateProductSchema, 'body'),
   async (req, res, next) => {
     try {
-      const body = req.body;
       const { id } = req.query;
-      const product = await service.update(body,id);
-      res.json({message: 'Updated', product});
+      const body = req.body;
+      const product = await service.update(id,body);
+      res.json({ message: 'Updated', product });
     } catch (error) {
       next(error);
     }
   }
 );
 
-router.delete('/del',
+router.delete(
+  '/del',
   validatorHandler(getProductSchema, 'query'),
   async (req, res, next) => {
     try {
       const { id } = req.query;
-      const product = await service.findOne(id)
+      const product = await service.findOne(id);
       if (id) {
         await service.delete(id);
-        res.status(201).json({message: 'deleted', product});
+        res.status(201).json({ message: 'deleted', product });
       }
-
     } catch (error) {
       next(error);
     }
