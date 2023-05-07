@@ -13,11 +13,12 @@ const createCustSchema = Joi.object({
   name: name.required(),
   lastName: lastName.required(),
   phone: phone.required(),
-  user: Joi.object({
+  userId
+  /*user: Joi.object({
     email: email.required(),
     password: password.required(),
     role
-  })
+  })*/
 
 });
 

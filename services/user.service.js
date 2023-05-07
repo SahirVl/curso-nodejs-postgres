@@ -1,16 +1,17 @@
 const boom = require('@hapi/boom');
 const { models } = require('../libs/sequelize');
-const pool = require('../libs/mysql.pool');
+//const pool = require('../libs/mysql.pool');
 const { Op } = require('sequelize');
 
 class UserService {
   constructor() {
-    this.pool = pool;
-    this.pool.on('error', (err) => console.error(err));
+    //this.pool = pool;
+    //this.pool.on('error', (err) => console.error(err));
   }
 
   async create(data) {
     const newUser = await models.User.create(data);
+    delete newUser.dataValues.password;
     return newUser;
   }
 
@@ -27,9 +28,12 @@ class UserService {
   }*/
   async find() {
     const rta = await models.User.findAll({
+      attributes: {
+        exclude: ['password'],
+      },
       include: ['customer'],
     });
-    if (!rta) {
+    if (!rta || rta == false) {
       return { message: 'no se hallaron datos' };
     }
     return rta;
@@ -44,8 +48,18 @@ class UserService {
   async findOne(id, email) {
     const user = await models.User.findAll({
       where: {
-        [Op.or]: [{ id: { [Op.like]: id } } , { email: { [Op.like]: email } }],
+        [Op.or]: [{ id: { [Op.like]: id } }, { email: { [Op.like]: email } }],
       },
+    });
+    if (!user || user == false) {
+      throw boom.notFound();
+    }
+    return user;
+  }
+
+  async findEmail(email) {
+    const user = await models.User.findOne({
+      where: { email },
     });
     if (!user || user == false) {
       throw boom.notFound();
