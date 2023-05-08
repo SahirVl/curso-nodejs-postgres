@@ -7,7 +7,6 @@ const service = new UserService();
 const localStrategy = new Strategy(async (email, password, done) => {
   try {
     const user = await service.findEmail(email);
-    console.log(user);
     if (!user) {
       done(unauthorized('No se encontro el usuario'), false);
     }
@@ -15,7 +14,7 @@ const localStrategy = new Strategy(async (email, password, done) => {
     if (!isMatch) {
       done(unauthorized('Wrong user or password'), false);
     }
-    done(null, `${user.email} has succesfully logged`);
+    done(null, user);
   } catch (error) {
     done(error, false);
   }
