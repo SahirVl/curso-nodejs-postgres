@@ -3,6 +3,8 @@ const express = require('express');
 const CategoryService = require('./../services/category.service');
 const validatorHandler = require('./../middlewares/validator.handler');
 const { createCategorySchema, updateCategorySchema, getCategorySchema } = require('./../schemas/category.schema');
+const passport = require('passport');
+const { adminCheck, roleCheck } = require('../middlewares/auth.handler');
 
 const router = express.Router();
 const service = new CategoryService();
@@ -30,6 +32,8 @@ router.get('/search',
 );
 
 router.post('/',
+  passport.authenticate('jwt',{session: false}), // este me valida el token
+  roleCheck('admin'), // este me valida que rol tiene permiso, se lo paso en string
   validatorHandler(createCategorySchema, 'body'),
   async (req, res, next) => {
     try {
@@ -43,6 +47,7 @@ router.post('/',
 );
 
 router.patch('/updt',
+  passport.authenticate('jwt',{session: false}),
   validatorHandler(getCategorySchema, 'query'),
   validatorHandler(updateCategorySchema, 'body'),
   async (req, res, next) => {
@@ -58,6 +63,7 @@ router.patch('/updt',
 );
 
 router.delete('/del',
+  passport.authenticate('jwt',{session: false}),
   validatorHandler(getCategorySchema, 'params'),
   async (req, res, next) => {
     try {
